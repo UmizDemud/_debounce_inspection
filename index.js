@@ -2,9 +2,14 @@ const res = document.createElement('p')
 document.body.append(res)
 
 function debounce(f, delay) {
+  let timerId;
+
   return function(...args) {
-    return setTimeout(() => {
-			res.innerHTML += '<br />__debounced__<br />'
+    if (timerId) {
+      clearTimeout(timerId)
+    }
+
+    timerId = setTimeout(() => {
       f.apply(this, args)
     }, delay);
   }
@@ -16,8 +21,7 @@ function onChange() {
   console.log(this.value); // uncomment if you implemented debounce with correct this
 }
 
-let wrapper = debounce(onChange, 1000);
-
+const debouncedOnChange = debounce(onChange, 1000);
 
 input1.addEventListener('input', onChange);
-input1.addEventListener('input', wrapper);
+input1.addEventListener('input', debouncedOnChange);
